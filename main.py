@@ -3,11 +3,11 @@ import statistics
 from dataclasses import dataclass
 from enum import Enum
 
-CARDS_COUNT = 7
+CARDS_COUNT = 52
 CARDS = [i for i in range(CARDS_COUNT)]
 TURNS_THRESHOLD = 10000
 
-GAMES_COUNT = 1000
+GAMES_COUNT = 10000
 
 DEBUG = True
 DEBUG = False
@@ -24,7 +24,8 @@ def play_games():
 
     print()
     # print(sorted(valid_turns))
-    print(f'On average the game took {avg_turns} turns. P1 won {p1_wins} times, P2 won {p2_wins} times.')
+    print(f'After {len(valid_results)} games with {CARDS_COUNT} cards, on average the game took {avg_turns} turns. P1 won {p1_wins} times, P2 won {p2_wins} '
+          f'times.')
 
 
 class EndState(Enum):
@@ -37,7 +38,7 @@ class EndState(Enum):
 class GameResult:
     turns: int
     strength_diff: int
-    end_state: EndState = None  # init to None, otherwise 'if not result.result' fails
+    end_state: EndState = None
 
 
 class TheGame:
@@ -114,6 +115,8 @@ class TheGame:
 
     @staticmethod
     def print_game_end(result):
+        if not DEBUG:
+            return
         print(f'{result.end_state}! The game took {result.turns} turns to end given initial strength difference of {abs(result.strength_diff)}')
 
 
