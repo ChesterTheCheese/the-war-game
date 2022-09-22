@@ -19,13 +19,15 @@ def play_games():
     valid_results = [r for r in results if r.end_state is not EndState.GAME_TOO_LONG]
     valid_turns = [r.turns for r in valid_results]
     avg_turns = statistics.fmean(valid_turns)
+    valid_strength_diffs = [r.strength_diff for r in results]
+    avg_strength_diff = statistics.fmean(valid_strength_diffs)
     p1_wins = sum([1 for r in valid_results if r.end_state is EndState.P1_WIN])
     p2_wins = sum([1 for r in valid_results if r.end_state is EndState.P2_WIN])
 
-    print()
-    # print(sorted(valid_turns))
-    print(f'After {len(valid_results)} games with {CARDS_COUNT} cards, on average the game took {avg_turns} turns. P1 won {p1_wins} times, P2 won {p2_wins} '
-          f'times.')
+    print(f'After {len(valid_results)} games with {CARDS_COUNT} cards'
+          f', on average the game took {avg_turns} turns with a average {abs(avg_strength_diff)} strength difference.'
+          f' P1 won {p1_wins} times, P2 won {p2_wins} times.')
+    return p1_wins
 
 
 class EndState(Enum):
