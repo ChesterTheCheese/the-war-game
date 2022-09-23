@@ -9,6 +9,8 @@ TURNS_THRESHOLD = 10000
 
 GAMES_COUNT = 10000
 
+INFO = True
+INFO = False
 DEBUG = True
 DEBUG = False
 
@@ -25,7 +27,7 @@ def play_games():
     p2_wins = sum([1 for r in valid_results if r.end_state is EndState.P2_WIN])
 
     print(f'After {len(valid_results)} games with {CARDS_COUNT} cards'
-          f', on average the game took {avg_turns} turns with a average {abs(avg_strength_diff)} strength difference.'
+          f', on average the game took {avg_turns:.2f} turns with a average {abs(avg_strength_diff):.2f} strength difference.'
           f' P1 won {p1_wins} times, P2 won {p2_wins} times.')
     return p1_wins
 
@@ -53,6 +55,9 @@ class TheGame:
         half = int(CARDS_COUNT / 2)
         p1_deck = deck[:half]
         p2_deck = deck[half:]
+
+        # if sum(p1_deck) < sum(p2_deck):
+        #     p1_deck, p2_deck = p2_deck, p1_deck  # always make P1 the stronger player for "easier" analysis
 
         TheGame.print_game_start(p1_deck, p2_deck)
 
@@ -91,7 +96,7 @@ class TheGame:
 
     @staticmethod
     def print_game_start(p1_deck, p2_deck):
-        if not DEBUG:
+        if not INFO:
             return
 
         p1_strength = sum(p1_deck)
@@ -117,9 +122,10 @@ class TheGame:
 
     @staticmethod
     def print_game_end(result):
-        if not DEBUG:
+        if not INFO:
             return
-        print(f'{result.end_state}! The game took {result.turns} turns to end given initial strength difference of {abs(result.strength_diff)}')
+        state = "P1 wins" if result.end_state is EndState.P1_WIN else "P2 wins" if result.end_state is EndState.P2_WIN else "Draw"
+        print(f'[Game ended] {state}! The game took {result.turns} turns to end given initial strength difference of {abs(result.strength_diff)}')
 
 
 if __name__ == '__main__':
