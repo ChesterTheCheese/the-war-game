@@ -21,7 +21,7 @@ def play_games():
     valid_results = [r for r in results if r.end_state is not EndState.GAME_TOO_LONG]
     valid_turns = [r.turns for r in valid_results]
     avg_turns = statistics.fmean(valid_turns)
-    valid_strength_diffs = [r.strength_diff for r in results]
+    valid_strength_diffs = [abs(r.strength_diff) for r in results]
     avg_strength_diff = statistics.fmean(valid_strength_diffs)
     p1_wins = sum([1 for r in valid_results if r.end_state is EndState.P1_WIN])
     p2_wins = sum([1 for r in valid_results if r.end_state is EndState.P2_WIN])
